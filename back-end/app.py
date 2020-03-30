@@ -12,90 +12,100 @@ userIdBase = 408
 menuList = [
     {
         'id': 1,
-        'authName': '用户管理',
+        'authName': 'WebConsole',
         'path': 'null',
                 'children': [
                     {
                         'id': 11,
-                        'authName': '用户列表',
-                        'path': 'users',
-                    }
+                        'authName': 'CMD Window',
+                        'path': 'consoleMain',
+                    },
+                    {
+                        'id': 12,
+                        'authName': 'CMD Get',
+                        'path': 'consoleGetCMD',
+                    },
+                    {
+                        'id': 13,
+                        'authName': 'Config',
+                        'path': 'consoleConfig',
+                    },
                 ]
     },
     {
         'id': 2,
-        'authName': '权限管理',
+        'authName': 'Test',
         'path': 'null',
                 'children': [
                     {
                         'id': 21,
-                        'authName': '角色列表',
+                        'authName': 'test1',
                         'path': 'roles',
                     },
                     {
                         'id': 22,
-                        'authName': '权限列表',
+                        'authName': 'test2',
                         'path': 'rights',
                     }
                 ]
     },
-    {
-        'id': 3,
-        'authName': '商品管理',
-        'path': 'null',
-                'children': [
-                    {
-                        'id': 31,
-                        'authName': '商品列表',
-                        'path': 'null',
-                    },
-                    {
-                        'id': 32,
-                        'authName': '分类参数',
-                        'path': 'null',
-                    },
-                    {
-                        'id': 33,
-                        'authName': '商品分类',
-                        'path': 'null',
-                    }
-                ]
-    },
-    {
-        'id': 4,
-        'authName': '订单管理',
-        'path': 'null',
-                'children': [
-                    {
-                        'id': 41,
-                        'authName': '订单列表',
-                        'path': 'null',
-                    },
-                    {
-                        'id': 42,
-                        'authName': '订单列表2',
-                        'path': 'null',
-                    }
+    # {
+    #     'id': 3,
+    #     'authName': '商品管理',
+    #     'path': 'null',
+    #             'children': [
+    #                 {
+    #                     'id': 31,
+    #                     'authName': '商品列表',
+    #                     'path': 'null',
+    #                 },
+    #                 {
+    #                     'id': 32,
+    #                     'authName': '分类参数',
+    #                     'path': 'null',
+    #                 },
+    #                 {
+    #                     'id': 33,
+    #                     'authName': '商品分类',
+    #                     'path': 'null',
+    #                 }
+    #             ]
+    # },
+    # {
+    #     'id': 4,
+    #     'authName': '订单管理',
+    #     'path': 'null',
+    #             'children': [
+    #                 {
+    #                     'id': 41,
+    #                     'authName': '订单列表',
+    #                     'path': 'null',
+    #                 },
+    #                 {
+    #                     'id': 42,
+    #                     'authName': '订单列表2',
+    #                     'path': 'null',
+    #                 }
 
-                ]
-    },
-    {
-        'id': 5,
-        'authName': '数据统计',
-        'path': 'null',
-                'children': [
-                    {
-                        'id': 51,
-                        'authName': '数据1',
-                        'path': 'null',
-                    },
-                    {
-                        'id': 52,
-                        'authName': '数据2',
-                        'path': 'null',
-                    }
-                ]
-    }
+    #             ]
+    # },
+    # {
+    #     'id': 5,
+    #     'authName': '数据统计',
+    #     'path': 'null',
+    #             'children': [
+    #                 {
+    #                     'id': 51,
+    #                     'authName': '数据1',
+    #                     'path': 'null',
+    #                 },
+    #                 {
+    #                     'id': 52,
+    #                     'authName': '数据2',
+    #                     'path': 'null',
+    #                 }
+    #             ]
+    # }
 ]
 
 userList = [
@@ -340,7 +350,7 @@ rolesList = [
             }
         ]
     },
-        {
+    {
         'id': 2,
         'roleName': '测试角色',
         'roleDesc': '测试角色描述',
@@ -366,7 +376,7 @@ rolesList = [
             }
         ]
     },
-        {
+    {
         'id': 3,
         'roleName': '测试角色2',
         'roleDesc': '测试角色描述2',
@@ -392,7 +402,7 @@ rolesList = [
             }
         ]
     },
-        {
+    {
         'id': 4,
         'roleName': 'drop',
         'roleDesc': 'dropdrop',
@@ -424,6 +434,30 @@ rolesList = [
 @app.route('/')
 def index():
     return 'Hello World'
+
+
+@app.route('/api/s1', methods=['POST'])
+def executePostCMD():
+    data = request.get_data().decode('utf-8')
+    print('in POST Data', data)
+    # data = json.loads(data)
+    # data['test'] = 'testValueOh'*100
+    return json.dumps(
+        {
+            'data': 'data',
+            'meta': {'msg': 'Post CMD success', 'status': 200}
+        }
+    )
+
+
+@app.route('/api/s2/<cmd>', methods=['GET'])
+def executeGetCMD(cmd):
+    return json.dumps(
+        {
+            'data': cmd,
+            'meta': {'msg': 'Get CMD success', 'status': 200}
+        }
+    )
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
