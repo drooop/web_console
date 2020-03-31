@@ -115,24 +115,26 @@ export default {
         method: this.cmd_form.cmdMethod
       }
       if (this.cmd_form.trigger_sendCMD === 'once') {
-        const {data: res} = await this.$http.post('http://localhost:81/api/cmd', temp)
-        if(res.meta.status!=200)return this.$message.error('login failed')
+        const { data: res } = await this.$http.post(
+          'http://localhost:81/api/cmd',
+          temp
+        )
+        if (res.meta.status != 200) return this.$message.error('login failed')
         this.$message.success('login success')
         this.cmd_form.cmdResponse +=
-            'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
+          'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
       } else {
         let _this = this
-          this.timerId = setInterval(async () => {
-            const { data: res } = await _this.$http.post(
-              'http://localhost:81/api/cmd',
-              temp
-            )
-            if (res.meta.status !== 200)
-              return _this.$message.error(res.meta.msg)
-            _this.$message.success(res.meta.msg)
-            _this.cmd_form.cmdResponse +=
-              'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
-          }, _this.cmd_form.CMDIntervalTime * 1000)
+        this.timerId = setInterval(async () => {
+          const { data: res } = await _this.$http.post(
+            'http://localhost:81/api/cmd',
+            temp
+          )
+          if (res.meta.status !== 200) return _this.$message.error(res.meta.msg)
+          _this.$message.success(res.meta.msg)
+          _this.cmd_form.cmdResponse +=
+            'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
+        }, _this.cmd_form.CMDIntervalTime * 1000)
       }
     },
     resetForm() {
