@@ -5,7 +5,8 @@ data = {
   'cmd': 'asd'
 }
 
-r = requests.post('http://localhost:81/api/s1', data=data)
+# r = requests.post('http://localhost:81/api/s1', data=data)
+r = requests.get(url='http://localhost:81/api/s1', params={'key1':'value1','key2':'value2'})
 
 print(r.text)
 'http://localhost/api/s1'

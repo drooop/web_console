@@ -76,20 +76,20 @@ export default {
     return {
       cmd_form: {
         // virtualStationUrl: 'https://app1.sys.yhlcps.com/s1',
-        virtualStationUrl: 'http://localhost/api/s1',
+        virtualStationUrl: 'http://172.16.14.20:30333/testa',
         virtualStationCMD: 'start',
         trigger_sendCMD: 'once',
         CMDIntervalTime: 3,
         cmdResponse: '',
-        cmdMethod: 'post'
+        cmdMethod: 'get'
       },
       generateCMDFormRules: {
         virtualStationUrl: [
-          { required: true, message: 'please input url', trigger: 'blur' }
+          { required: false, message: 'please input url', trigger: 'blur' }
           // {min: 3, max: 10, message: "length of username between 3-10", trigger: "blur"}
         ],
         virtualStationCMD: [
-          { required: true, message: 'please input cmd', trigger: 'blur' }
+          { required: false, message: 'please input cmd', trigger: 'blur' }
           // {min: 6, max: 15, message: "length of username between 6-15", trigger: "blur"}
         ],
         CMDIntervalTime: [
@@ -112,32 +112,62 @@ export default {
       const temp = {
         cmd: this.cmd_form.virtualStationCMD
       }
-      if (this.cmd_form.trigger_sendCMD === 'once') {
-        const { data: res } = await this.$http.post(
-          'http://localhost:81/api/s1',
-          temp
-        )
-        console.log('this is re:\n', res)
-        if (res.meta.status != 200) return this.$message.error('login failed')
-        this.$message.success('login success')
-        this.cmd_form.cmdResponse +=
-          'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
-      } else {
-        let _this = this
-        this.timerId = setInterval(async () => {
-          const { data: res } = await _this.$http.post(
-            'http://localhost:81/api/s1',
+      if (this.cmd_form.cmdMethod === 'post') {
+        if (this.cmd_form.trigger_sendCMD === 'once') {
+          const { data: res } = await this.$http.post(
+            this.cmd_form.virtualStationUrl,
             temp
           )
-          if (res.meta.status !== 200) return _this.$message.error(res.meta.msg)
-          _this.$message.success(res.meta.msg)
-          _this.cmd_form.cmdResponse +=
+          if (res.meta.status != 200) return this.$message.error('login failed')
+          this.$message.success('login success')
+          this.cmd_form.cmdResponse +=
             'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
-        }, _this.cmd_form.CMDIntervalTime * 1000)
+        } else {
+          let _this = this
+          this.timerId = setInterval(async () => {
+            const { data: res } = await _this.$http.post(
+              this.cmd_form.virtualStationUrl,
+              temp
+            )
+            if (res.meta.status !== 200)
+              return _this.$message.error(res.meta.msg)
+            _this.$message.success(res.meta.msg)
+            _this.cmd_form.cmdResponse +=
+              'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
+          }, _this.cmd_form.CMDIntervalTime * 1000)
+        }
+      } else {
+        if (this.cmd_form.trigger_sendCMD === 'repeat') {
+          // if repeat, do
+          let _this = this
+          this.timerId = setInterval(async () => {
+            // setInterval(async ()=>{
+            const { data: res } = await _this.$http.get(
+              this.cmd_form.virtualStationUrl,
+              this.cmd_form.virtualStationCMD
+            )
+            if (res.meta.status !== 200)
+              return _this.$message.error(res.meta.msg)
+            _this.$message.success(res.meta.msg)
+            _this.cmd_form.cmdResponse +=
+              'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
+          }, _this.cmd_form.CMDIntervalTime * 1000)
+        } else {
+          // if not, do
+          const { data: res } = await this.$http.get(
+            this.cmd_form.virtualStationUrl,
+            {
+              params: temp
+            }
+          )
+          if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+          this.$message.success(res.meta.msg)
+          this.cmd_form.cmdResponse +=
+            'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
+        }
       }
     },
     resetForm() {
-      console.log(this.$refs.generateCMDFormRef)
       if (this.timerId) {
         clearInterval(this.timerId)
       }

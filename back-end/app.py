@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask import request
 import json
+import requests
 
 
 app = Flask(__name__)
@@ -22,8 +23,8 @@ menuList = [
                     },
                     {
                         'id': 12,
-                        'authName': 'CMD Get',
-                        'path': 'consoleGetCMD',
+                        'authName': 'CMD 转发',
+                        'path': 'console',
                     },
                     {
                         'id': 13,
@@ -436,28 +437,61 @@ def index():
     return 'Hello World'
 
 
-@app.route('/api/s1', methods=['POST'])
+# @app.route('/api/s1', methods=['GET', 'POST'])
+# def executePostCMD():
+#     if request.method == 'POST':
+#         data = request.get_data().decode('utf-8')
+#         print('in POST Data', data)
+#         return json.dumps(
+#             {
+#                 'data': 'data',
+#                 'meta': {'msg': 'Post CMD success', 'status': 200}
+#             }
+#         )
+#     if request.method == 'GET':
+#         print('xixixhaha:\n', request.args.get('cmd'))
+#         return json.dumps(
+#             {
+#                 'data': 'getgetget',
+#                 'meta': {'msg': 'Get CMD success', 'status': 200}
+#             }
+#         )
+
+@app.route('/api/cmd', methods=['GET', 'POST'])
 def executePostCMD():
-    data = request.get_data().decode('utf-8')
-    print('in POST Data', data)
-    # data = json.loads(data)
-    # data['test'] = 'testValueOh'*100
-    return json.dumps(
-        {
-            'data': 'data',
-            'meta': {'msg': 'Post CMD success', 'status': 200}
-        }
-    )
+    if request.method == 'POST':
+        data = request.get_data().decode('utf-8')
+        data = json.loads(data)
+        print(f'\n\ndata:{type(data)}\n{data}\n\n')
+        """
 
-
-@app.route('/api/s2/<cmd>', methods=['GET'])
-def executeGetCMD(cmd):
-    return json.dumps(
-        {
-            'data': cmd,
-            'meta': {'msg': 'Get CMD success', 'status': 200}
-        }
-    )
+        """
+        url = data['url']
+        cmd = data['cmd']
+        method = data['method']
+        print(f'\n\n\nURL+CMD+method{url}, {cmd}, {method}')
+        if method == 'get':
+            targetURL = url
+            print(f'\n\ntargetURL:\n{targetURL}')
+            r = requests.get(targetURL)
+            print('in GET Data:\n', r.text, '\n\n')
+            return json.dumps(
+            {
+                'data': r.text,
+                'meta': {'msg': 'Get CMD success', 'status': 200}
+            }
+        )
+        if method == 'post':
+            targetURL = url
+            print(f'\n\ntargetURL:\n{targetURL}')
+            r = requests.post(targetURL)
+            print('in POST Data:\n', r.text, '\n\n')
+            return json.dumps(
+                {
+                    'data': r.text,
+                    'meta': {'msg': 'Post CMD success', 'status': 200}
+                }
+            )
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
@@ -466,7 +500,7 @@ def login():
         data = request.get_data().decode('utf-8')
         data_dict = json.loads(data)
         print(data_dict)
-        if data_dict.get('username') == 'yhlUser' and data_dict.get('password') == 'TQcps123':
+        if data_dict.get('username') == 'drop' and data_dict.get('password') == 'TQcps123':
             return json.dumps({'data': {'token': 'test_token 123321123'},
                                'meta': {'msg': 'success', 'status': 200}})
         else:
