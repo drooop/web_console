@@ -494,6 +494,46 @@ def executePostCMD():
             )
 
 
+@app.route('/api/cmd_new', methods=['GET', 'POST'])
+def executePostCMDNew():
+    if request.method == 'POST':
+        data = request.get_data().decode('utf-8')
+        data = json.loads(data)
+        print(f'\n\ndata:{type(data)}\n{data}\n\n')
+        """
+
+        """
+        url = data['url']
+        cmd = data['cmd']
+        method = data['method']
+        print(f'\n\n\nURL+CMD+method{url}, {cmd}, {method}')
+        if method == 'get':
+            if url == '':
+                targetURL = cmd
+            else:
+                targetURL = url+'/'+cmd
+            print(f'\n\ntargetURL:\n{targetURL}')
+            r = requests.get(targetURL)
+            print('in GET Data:\n', r.text, '\n\n')
+            return json.dumps(
+            {
+                'data': r.text,
+                'meta': {'msg': 'Get CMD success', 'status': 200}
+            }
+        )
+        if method == 'post':
+            targetURL = url
+            print(f'\n\ntargetURL:\n{targetURL}')
+            r = requests.post(targetURL)
+            print('in POST Data:\n', r.text, '\n\n')
+            return json.dumps(
+                {
+                    'data': r.text,
+                    'meta': {'msg': 'Post CMD success', 'status': 200}
+                }
+            )
+
+
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":

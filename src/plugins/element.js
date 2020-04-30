@@ -13,7 +13,12 @@ import {
   Submenu,
   MenuItem,
   MenuItemGroup,
-  Radio
+  Radio,
+  Col,
+  Row,
+  Card,
+  Table,
+  TableColumn
 } from 'element-ui'
 
 Vue.use(Button)
@@ -29,5 +34,10 @@ Vue.use(Button)
   .use(MenuItem)
   .use(MenuItemGroup)
   .use(Radio)
+  .use(Col)
+  .use(Row)
+  .use(Card)
+  .use(Table)
+  .use(TableColumn)
 
 Vue.prototype.$message = Message

@@ -64,7 +64,8 @@
           1: 'el-icon-s-platform',
           2: 'el-icon-loading'
         },
-        isCollapse: false
+        isCollapse: false,
+        backendURL: 'http://localhost:81'
       }
     },
     methods: {
@@ -73,10 +74,10 @@
       this.$router.push('/login')
     },
     async getMenuList(){
-      const {data:res} = await this.$http.get('http://localhost:81/api/menus')
+      const {data:res} = await this.$http.get(this.backendURL+'/api/menus')
       if (res.meta.status !== 200) return this.$message.error('res.meta.msg')
       this.menuList = res.data
-      console.log(res.data)
+      // console.log(res.data)
     },
     toggleCollapse(){
       this.isCollapse = !this.isCollapse

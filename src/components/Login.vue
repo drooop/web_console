@@ -41,8 +41,8 @@ export default {
   data() {
     return {
       login_form: {
-        username: '',
-        password: ''
+        username: 'drop',
+        password: 'TQcps123'
       },
       loginFormRules: {
         username: [
@@ -53,7 +53,8 @@ export default {
           {required: true, message: "please input password", trigger: "blur"},
           {min: 6, max: 15, message: "length of username between 6-15", trigger: "blur"}
         ]
-      }
+      },
+      backendURL: 'http://localhost:81'
     }
   },
   methods: {
@@ -63,7 +64,7 @@ export default {
     login() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return
-        const {data: res} = await this.$http.post('http://localhost:81/api/login', this.login_form)
+        const {data: res} = await this.$http.post(this.backendURL+'/api/login', this.login_form)
         // console.log(res)
         if(res.meta.status!=200)return this.$message.error('login failed')
         this.$message.success('login success')
@@ -73,6 +74,7 @@ export default {
 
         // push jump to '/home'
         this.$router.push("/home")
+        this.$message.success(this.$route.path)
 
       })
     }
