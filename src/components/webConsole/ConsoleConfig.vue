@@ -337,7 +337,7 @@ export default {
     }
   },
   mounted() {
-    this.get_slam_status(), this.get_agv_status()
+    // this.get_slam_status(), this.get_agv_status()
   },
   methods: {
     async sendCMD() {
@@ -442,7 +442,7 @@ export default {
         method: this.cmd_form.cmd3Method
       }
       const { data: res } = await this.$http.post(
-        this.backendURL+'/api/cmd_new',
+        this.backendURL + '/api/cmd_new',
         temp
       )
       // if (res.meta.status != 200) return this.$message.error('login failed')
@@ -466,40 +466,6 @@ export default {
       this.$message.success('cmd4 success')
       this.cmd_form.cmdResponse +=
         'ResponseDataFromCMD 4:\n' + JSON.stringify(res) + '\n\n\n'
-    },
-
-    // cmd5
-    async sendCMD5() {
-      const temp = {
-        url: this.cmd_form.virtualStationUrl,
-        cmd: this.cmd_form.cmd5,
-        method: this.cmd_form.cmd5Method
-      }
-      const { data: res } = await this.$http.post(
-        this.backendURL+'/api/cmd_new',
-        temp
-      )
-      // if (res.meta.status != 200) return this.$message.error('login failed')
-      this.$message.success('cmd5 success')
-      this.cmd_form.cmdResponse +=
-        'ResponseDataFromCMD 5:\n' + JSON.stringify(res) + '\n\n\n'
-    },
-
-    // cmd6
-    async sendCMD6() {
-      const temp = {
-        url: this.cmd_form.virtualStationUrl,
-        cmd: this.cmd_form.cmd6,
-        method: this.cmd_form.cmd6Method
-      }
-      const { data: res } = await this.$http.post(
-        this.backendURL+'/api/cmd_new',
-        temp
-      )
-      // if (res.meta.status != 200) return this.$message.error('login failed')
-      this.$message.success('cmd6 success')
-      this.cmd_form.cmdResponse +=
-        'ResponseDataFromCMD 6:\n' + JSON.stringify(res) + '\n\n\n'
     },
 
     // slam status

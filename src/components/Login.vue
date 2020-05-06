@@ -2,14 +2,14 @@
   <div id="app" class="login_container">
     <div class="login_box">
       <div class="avatar_box">
-        <img src="../assets/yhl.png" alt="">
+        <img src="../assets/yhl.png" alt="" />
       </div>
       <el-form
-      ref="loginFormRef"
-      :model="login_form"
-      :rules="loginFormRules"
-      label-width="0px"
-      class="login_form"
+        ref="loginFormRef"
+        :model="login_form"
+        :rules="loginFormRules"
+        label-width="0px"
+        class="login_form"
       >
         <!-- userName  -->
         <el-form-item prop="username">
@@ -46,12 +46,22 @@ export default {
       },
       loginFormRules: {
         username: [
-          {required: true, message: "please input username", trigger: "blur"},
-          {min: 3, max: 10, message: "length of username between 3-10", trigger: "blur"}
+          { required: true, message: 'please input username', trigger: 'blur' },
+          {
+            min: 3,
+            max: 10,
+            message: 'length of username between 3-10',
+            trigger: 'blur'
+          }
         ],
         password: [
-          {required: true, message: "please input password", trigger: "blur"},
-          {min: 6, max: 15, message: "length of username between 6-15", trigger: "blur"}
+          { required: true, message: 'please input password', trigger: 'blur' },
+          {
+            min: 6,
+            max: 15,
+            message: 'length of username between 6-15',
+            trigger: 'blur'
+          }
         ]
       },
       backendURL: 'http://localhost:81'
@@ -64,18 +74,20 @@ export default {
     login() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return
-        const {data: res} = await this.$http.post(this.backendURL+'/api/login', this.login_form)
+        const { data: res } = await this.$http.post(
+          this.backendURL + '/api/login',
+          this.login_form
+        )
         // console.log(res)
-        if(res.meta.status!=200)return this.$message.error('login failed')
+        if (res.meta.status != 200) return this.$message.error('login failed')
         this.$message.success('login success')
 
         // save token in SessionStorage
-        window.sessionStorage.setItem("token", res.data.token)
+        window.sessionStorage.setItem('token', res.data.token)
 
         // push jump to '/home'
-        this.$router.push("/home")
+        this.$router.push('/home')
         this.$message.success(this.$route.path)
-
       })
     }
   }
@@ -130,5 +142,4 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
 }
-  
 </style>

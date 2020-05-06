@@ -118,7 +118,7 @@ class Menu(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Headers', 'x-requested-with')
         self.set_header('Access-Control-Allow-Methods',
-                        'POST, GET, PUT, DELETE')
+                        'POST, GET, PUT, DELETE, OPTIONS')
         menu = {
             'data': menuList,
             'meta': {
@@ -131,21 +131,24 @@ class Menu(tornado.web.RequestHandler):
 
 class Login(tornado.web.RequestHandler):
     def get(self):
+        self.write('in get')
+
+    def post(self):
+        print('in post')
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Headers', 'x-requested-with')
         self.set_header('Access-Control-Allow-Methods',
-                        'POST, GET, PUT, DELETE')
-        if self.request.method == "POST":
-            data = self.request.get_data().decode('utf-8')
-            data_dict = json.loads(data)
-            if data_dict.get('username') == 'drop' and data_dict.get('password') == 'TQcps123':
-                self.write(json.dumps({'data': {'token': 'test_token 123321123'},
-                                       'meta': {'msg': 'success', 'status': 200}}))
-            else:
-                self.write(json.dumps(
-                    {'meta': {'msg': 'fail to login', 'status': 400}}))
-        else:
-            self.write(json.dumps({'data': 'method error'}))
+                        'POST, GET, PUT, DELETE, OPTIONS')
+        self.write('drop')
+        # data = self.request.body
+        # print(data)
+        # data_dict = json.loads(data)
+        # if data_dict.get('username') == 'drop' and data_dict.get('password') == 'TQcps123':
+        #     self.write(json.dumps({'data': {'token': 'test_token 123321123'},
+        #                             'meta': {'msg': 'success', 'status': 200}}))
+        # else:
+        #     self.write(json.dumps(
+        #         {'meta': {'msg': 'fail to login', 'status': 400}}))
 
 
 def make_app():
