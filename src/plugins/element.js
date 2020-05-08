@@ -18,7 +18,10 @@ import {
   Row,
   Card,
   Table,
-  TableColumn
+  TableColumn,
+  Collapse,
+  CollapseItem,
+  Divider
 } from 'element-ui'
 
 Vue.use(Button)
@@ -39,5 +42,8 @@ Vue.use(Button)
   .use(Card)
   .use(Table)
   .use(TableColumn)
+  .use(Collapse)
+  .use(CollapseItem)
+  .use(Divider)
 
 Vue.prototype.$message = Message
