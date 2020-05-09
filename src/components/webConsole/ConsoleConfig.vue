@@ -1,203 +1,264 @@
 <template>
   <div style="font-family: 'PingFang SC'">
-    <h3>虚拟工位控制台</h3>
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <div class="grid-content bg-purple">
-          <el-card class="box-card">
-            <el-form
-              ref="generateCMDFormRef"
-              :model="cmd_form"
-              :rules="generateCMDFormRules"
-              label-width="0px"
-            >
-              <el-row :gutter="10">
-                <el-col :span="19">
-                  <div class="grid-content bg-purple">
-                    <el-form-item prop="cmd1">
-                      <el-input
-                        placeholder="请输入微服务的可执行命令代码"
-                        v-model="cmd_form.cmd1"
-                        clearable
-                      >
-                        <template slot="prepend">
-                          <el-button type="primary" @click="sendCMD1">
-                            cmd1
-                          </el-button>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </div>
-                </el-col>
-                <el-col :span="5">
-                  <div class="grid-content bg-purple">
-                    <el-input
-                      placeholder="name"
-                      v-model="cmd_form.cmd1Name"
-                      clearable
-                    ></el-input>
-                  </div>
-                </el-col>
-              </el-row>
-
-              <el-row :gutter="10">
-                <el-col :span="19">
-                  <div class="grid-content bg-purple">
-                    <el-form-item prop="cmd2">
-                      <el-input
-                        placeholder="请输入微服务的可执行命令代码"
-                        v-model="cmd_form.cmd2"
-                        clearable
-                      >
-                        <template slot="prepend">
-                          <el-button type="primary" @click="sendCMD2">
-                            cmd2
-                          </el-button>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </div>
-                </el-col>
-                <el-col :span="5">
-                  <div class="grid-content bg-purple">
-                    <el-input
-                      placeholder="name"
-                      v-model="cmd_form.cmd2Name"
-                      clearable
-                    ></el-input>
-                  </div>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10">
-                <el-col :span="19">
-                  <div class="grid-content bg-purple">
-                    <el-form-item prop="cmd3">
-                      <el-input
-                        placeholder="请输入微服务的可执行命令代码"
-                        v-model="cmd_form.cmd3"
-                        clearable
-                      >
-                        <template slot="prepend">
-                          <el-button type="primary" @click="sendCMD3">
-                            cmd3
-                          </el-button>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </div>
-                </el-col>
-                <el-col :span="5">
-                  <div class="grid-content bg-purple">
-                    <el-input
-                      placeholder="name"
-                      v-model="cmd_form.cmd3Name"
-                      clearable
-                    ></el-input>
-                  </div>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10">
-                <el-col :span="19">
-                  <div class="grid-content bg-purple">
-                    <el-form-item prop="cmd4">
-                      <el-input
-                        placeholder="请输入微服务的可执行命令代码"
-                        v-model="cmd_form.cmd4"
-                        clearable
-                      >
-                        <template slot="prepend">
-                          <el-button type="primary" @click="sendCMD4">
-                            cmd4
-                          </el-button>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </div>
-                </el-col>
-                <el-col :span="5">
-                  <div class="grid-content bg-purple">
-                    <el-input
-                      placeholder="name"
-                      v-model="cmd_form.cmd4Name"
-                      clearable
-                    ></el-input>
-                  </div>
-                </el-col>
-              </el-row>
-              <!-- Get/Post -->
-              <!-- <el-form-item prop="cmdMethod">
-        <el-radio v-model="cmd_form.cmdMethod" label="get">get</el-radio>
-        <el-radio v-model="cmd_form.cmdMethod" label="post">post</el-radio>-->
-              <el-form-item>
-                <el-button type="info" @click="resetForm">重置</el-button>
-              </el-form-item>
-
-              <el-form-item>
-                <el-button type="primary" @click="resetTimer">重置Timer</el-button>
-              </el-form-item>
-              <!-- result -->
-              <el-form-item prop="cmdResponse">
-                <el-input
-                  type="textarea"
-                  :autosize="{ minRows: 7, maxRows: 7 }"
-                  placeholder="请输入内容"
-                  v-model="cmd_form.cmdResponse"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </el-form>
-          </el-card>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <el-card class="box-card">
-          <div class="grid-content bg-purple">
-            <strong>车体状态:</strong>
-            {{ agv_running_status }}
-          </div>
-        </el-card>
-        <el-row>
-          <el-col :span="12">
-            <div class="grid-content bg-purple-light">
-              <el-card class="box-card">
-                <div class="grid-content bg-purple">
-                  <strong>车体:</strong>
-                  <el-table
-                    :data="agv_statusList"
-                    style="width: 100%"
-                    size="mini "
-                    :row-style="{ height: '10px' }"
-                    :header-row-style="{ height: '10px' }"
-                  >
-                    <el-table-column prop="attr" label="属性"></el-table-column>
-                    <el-table-column prop="value" label="值"></el-table-column>
-                  </el-table>
-                </div>
-              </el-card>
-            </div>
-          </el-col>
+    <el-button>虚拟工位控制台</el-button>
+    <el-collapse v-model="activeNames">
+      <el-collapse-item title="一致性 Consistency" name="1">
+        <el-row :gutter="20">
           <el-col :span="12">
             <div class="grid-content bg-purple">
               <el-card class="box-card">
-                <div class="grid-content bg-purple">
-                  <strong>SlAM:</strong>
-                  <el-table
-                    :data="slam_statusList"
-                    style="width: 100%"
-                    size="mini "
-                    :row-style="{ height: '10px' }"
-                    :header-row-style="{ height: '10px' }"
-                  >
-                    <el-table-column prop="attr" label="属性"></el-table-column>
-                    <el-table-column prop="value" label="值"></el-table-column>
-                  </el-table>
-                </div>
+                <el-form
+                  ref="generateCMDFormRef"
+                  :model="cmd_form"
+                  :rules="generateCMDFormRules"
+                  label-width="0px"
+                  size="mini"
+                >
+                  <el-row :gutter="10">
+                    <el-col :span="19">
+                      <div class="grid-content bg-purple">
+                        <el-form-item prop="cmd1">
+                          <el-input
+                            placeholder="请输入微服务的可执行命令代码"
+                            v-model="cmd_form.cmd1"
+                            clearable
+                          >
+                            <template slot="prepend">
+                              <el-button type="primary" @click="sendCMD1">
+                                cmd1
+                              </el-button>
+                            </template>
+                          </el-input>
+                        </el-form-item>
+                      </div>
+                    </el-col>
+                    <el-col :span="5">
+                      <div class="grid-content bg-purple">
+                        <el-input
+                          placeholder="name"
+                          v-model="cmd_form.cmd1Name"
+                          clearable
+                        ></el-input>
+                      </div>
+                    </el-col>
+                  </el-row>
+
+                  <el-row :gutter="10">
+                    <el-col :span="19">
+                      <div class="grid-content bg-purple">
+                        <el-form-item prop="cmd2">
+                          <el-input
+                            placeholder="请输入微服务的可执行命令代码"
+                            v-model="cmd_form.cmd2"
+                            clearable
+                          >
+                            <template slot="prepend">
+                              <el-button type="primary" @click="sendCMD2">
+                                cmd2
+                              </el-button>
+                            </template>
+                          </el-input>
+                        </el-form-item>
+                      </div>
+                    </el-col>
+                    <el-col :span="5">
+                      <div class="grid-content bg-purple">
+                        <el-input
+                          placeholder="name"
+                          v-model="cmd_form.cmd2Name"
+                          clearable
+                        ></el-input>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="19">
+                      <div class="grid-content bg-purple">
+                        <el-form-item prop="cmd3">
+                          <el-input
+                            placeholder="请输入微服务的可执行命令代码"
+                            v-model="cmd_form.cmd3"
+                            clearable
+                          >
+                            <template slot="prepend">
+                              <el-button type="primary" @click="sendCMD3">
+                                cmd3
+                              </el-button>
+                            </template>
+                          </el-input>
+                        </el-form-item>
+                      </div>
+                    </el-col>
+                    <el-col :span="5">
+                      <div class="grid-content bg-purple">
+                        <el-input
+                          placeholder="name"
+                          v-model="cmd_form.cmd3Name"
+                          clearable
+                        ></el-input>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="19">
+                      <div class="grid-content bg-purple">
+                        <el-form-item prop="cmd4">
+                          <el-input
+                            placeholder="请输入微服务的可执行命令代码"
+                            v-model="cmd_form.cmd4"
+                            clearable
+                          >
+                            <template slot="prepend">
+                              <el-button type="primary" @click="sendCMD4">
+                                cmd4
+                              </el-button>
+                            </template>
+                          </el-input>
+                        </el-form-item>
+                      </div>
+                    </el-col>
+                    <el-col :span="5">
+                      <div class="grid-content bg-purple">
+                        <el-input
+                          placeholder="name"
+                          v-model="cmd_form.cmd4Name"
+                          clearable
+                        ></el-input>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <!-- Get/Post -->
+                  <!-- <el-form-item prop="cmdMethod">
+        <el-radio v-model="cmd_form.cmdMethod" label="get">get</el-radio>
+        <el-radio v-model="cmd_form.cmdMethod" label="post">post</el-radio>-->
+                  <el-form-item>
+                    <el-button type="info" @click="resetForm">重置</el-button>
+                  </el-form-item>
+
+                  <el-form-item>
+                    <el-button type="primary" @click="resetTimer">
+                      重置Timer
+                    </el-button>
+                  </el-form-item>
+                  <!-- result -->
+                  <el-form-item prop="cmdResponse">
+                    <el-input
+                      type="textarea"
+                      :autosize="{ minRows: 15, maxRows: 7 }"
+                      placeholder="请输入内容"
+                      v-model="cmd_form.cmdResponse"
+                      clearable
+                    ></el-input>
+                  </el-form-item>
+                </el-form>
               </el-card>
             </div>
           </el-col>
+          <el-col :span="12">
+            <!-- AGV Running -->
+            <el-card class="box-card">
+              <div class="grid-content bg-purple">
+                <strong>车体状态:</strong>
+                {{ agv_running_status }}
+              </div>
+            </el-card>
+            <el-row>
+              <el-col :span="12">
+                <div class="grid-content bg-purple-light">
+                  <!-- AGV Status-->
+                  <el-card class="box-card">
+                    <div class="grid-content bg-purple">
+                      <strong>车体:</strong>
+                      <el-table
+                        :data="agv_statusList"
+                        style="width: 100%"
+                        size="mini "
+                        :row-style="{ height: '10px' }"
+                        :header-row-style="{ height: '10px' }"
+                      >
+                        <el-table-column
+                          prop="attr"
+                          label="属性"
+                        ></el-table-column>
+                        <el-table-column
+                          prop="value"
+                          label="值"
+                        ></el-table-column>
+                      </el-table>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="grid-content bg-purple">
+                  <!-- SLAM Status-->
+                  <el-card class="box-card">
+                    <div class="grid-content bg-purple">
+                      <strong>SlAM:</strong>
+                      <el-table
+                        :data="slam_statusList"
+                        style="width: 100%"
+                        size="mini"
+                        :row-style="{ height: '10px' }"
+                        :header-row-style="{ height: '10px' }"
+                      >
+                        <el-table-column
+                          prop="attr"
+                          label="属性"
+                        ></el-table-column>
+                        <el-table-column
+                          prop="value"
+                          label="值"
+                        ></el-table-column>
+                      </el-table>
+                    </div>
+                  </el-card>
+                </div>
+              </el-col>
+            </el-row>
+          </el-col>
         </el-row>
-      </el-col>
-    </el-row>
+      </el-collapse-item>
+      <el-collapse-item title="drop" name="2">
+        <el-card class="box-card">
+          <!-- 货叉部分 -->
+          <!-- 货叉请求表单 -->
+          <el-form
+            ref="forkliftCMDFormRef"
+            :model="forklift_form"
+            label-width="0px"
+          >
+            <el-row :gutter="2">
+              <!-- 执行按钮 -->
+              <el-col :span="4">
+                <el-button type="primary" icon="el-icon-s-operation" plain>
+                  执行货叉动作
+                </el-button>
+              </el-col>
+
+              <!-- 位置显示 -->
+              <el-col :span="6">
+                <div class="grid-content bg-purple">
+                  <el-form-item>
+                    <el-input
+                      placeholder="NaN"
+                      v-model="cmd_form.cmd1"
+                      disabled
+                    >
+                      <template slot="prepend">
+                        <el-button type="primary" plain>
+                          位置
+                        </el-button>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 
@@ -224,6 +285,7 @@ export default {
         cmd4Name: 'cmd4',
         cmdResponse: ''
       },
+      forklift_form: {},
       agv_running_status: 'none',
 
       slam_statusList: [
@@ -333,7 +395,8 @@ export default {
       timerId_agv: [],
       timer_agv_genaral: [],
       timerId_slam: [],
-      backendURL: 'http://localhost:81'
+      backendURL: 'http://localhost:81',
+      activeNames: ['2']
     }
   },
   mounted() {
@@ -408,7 +471,7 @@ export default {
         method: this.cmd_form.cmd1Method
       }
       const { data: res } = await this.$http.post(
-        this.backendURL+'/api/cmd_new',
+        this.backendURL + '/api/cmd_new',
         temp
       )
       // if (res.meta.status != 200) return this.$message.error('login failed')
@@ -425,7 +488,7 @@ export default {
         method: this.cmd_form.cmd2Method
       }
       const { data: res } = await this.$http.post(
-        this.backendURL+'/api/cmd_new',
+        this.backendURL + '/api/cmd_new',
         temp
       )
       // if (res.meta.status != 200) return this.$message.error('login failed')
@@ -459,7 +522,7 @@ export default {
         method: this.cmd_form.cmd4Method
       }
       const { data: res } = await this.$http.post(
-        this.backendURL+'/api/cmd_new',
+        this.backendURL + '/api/cmd_new',
         temp
       )
       // if (res.meta.status != 200) return this.$message.error('login failed')
@@ -479,7 +542,7 @@ export default {
           method: 'get'
         }
         const { data: res } = await this.$http.post(
-          this.backendURL+'/api/cmd_new',
+          this.backendURL + '/api/cmd_new',
           temp
         )
         // _this.$message.success('slam status get')
@@ -504,7 +567,7 @@ export default {
           method: 'get'
         }
         const { data: res } = await this.$http.post(
-          this.backendURL+'/api/cmd_new',
+          this.backendURL + '/api/cmd_new',
           temp
         )
         // _this.$message.success('agv status get')
@@ -535,15 +598,13 @@ export default {
     resetTimer() {
       this.timerId_agv.forEach(value => {
         clearInterval(value)
-      });
+      })
 
       this.timerId_slam.forEach(value => {
         clearInterval(value)
-      });
+      })
 
-      this.get_agv_status(),
-      this.get_slam_status()
-
+      this.get_agv_status(), this.get_slam_status()
     }
   }
 }

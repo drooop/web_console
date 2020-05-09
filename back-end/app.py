@@ -31,6 +31,11 @@ menuList = [
                         'authName': 'Config',
                         'path': 'consoleConfig',
                     },
+                    {
+                        'id': 14,
+                        'authName': '示教工具',
+                        'path': 'newConsole',
+                    }
                 ]
     },
     {
@@ -476,11 +481,11 @@ def executePostCMD():
             r = requests.get(targetURL)
             print('in GET Data:\n', r.text, '\n\n')
             return json.dumps(
-            {
-                'data': r.text,
-                'meta': {'msg': 'Get CMD success', 'status': 200}
-            }
-        )
+                {
+                    'data': r.text,
+                    'meta': {'msg': 'Get CMD success', 'status': 200}
+                }
+            )
         if method == 'post':
             targetURL = url
             print(f'\n\ntargetURL:\n{targetURL}')
@@ -516,11 +521,11 @@ def executePostCMDNew():
             r = requests.get(targetURL)
             print('in GET Data:\n', r.text, '\n\n')
             return json.dumps(
-            {
-                'data': r.text,
-                'meta': {'msg': 'Get CMD success', 'status': 200}
-            }
-        )
+                {
+                    'data': r.text,
+                    'meta': {'msg': 'Get CMD success', 'status': 200}
+                }
+            )
         if method == 'post':
             targetURL = url
             print(f'\n\ntargetURL:\n{targetURL}')
@@ -530,6 +535,34 @@ def executePostCMDNew():
                 {
                     'data': r.text,
                     'meta': {'msg': 'Post CMD success', 'status': 200}
+                }
+            )
+
+
+@app.route('/api/cmd_test', methods=['GET', 'POST'])
+def executeCMD_fake():
+    if request.method == 'POST':
+        data = request.get_data().decode('utf-8')
+        data = json.loads(data)
+        print(f'\n\ndata:{type(data)}\n{data}\n\n')
+        url = data.get('url')
+        cmd = data.get('cmd')
+        method = data.get('method')
+        print(f'\n\n\nURL+CMD+method{url}, {cmd}, {method}')
+
+        if method == 'get':
+            return json.dumps(
+                {
+                    'data': "get method test",
+                    'meta': {'msg': 'Get CMD success', 'status': 200}
+                }
+            )
+
+        if method == 'post':
+            return json.dumps(
+                {
+                    'data': "post method test",
+                    'meta': {'msg': 'POST CMD success', 'status': 200}
                 }
             )
 

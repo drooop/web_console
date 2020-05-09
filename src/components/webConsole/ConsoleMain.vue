@@ -3,7 +3,7 @@
     <h3>虚拟工位控制台</h3>
 
     <!-- 折叠区域， 每个Card都可折叠 -->
-    <el-collapse v-model="activeNames" @change="handleChange">
+    <el-collapse v-model="activeNames">
       <el-row :gutter="20">
         <!-- 左边区域，包含cmd send 和 遥控器 -->
         <el-col :span="12">
@@ -130,10 +130,6 @@
                       </div>
                     </el-col>
                   </el-row>
-                  <!-- Get/Post -->
-                  <!-- <el-form-item prop="cmdMethod">
-        <el-radio v-model="cmd_form.cmdMethod" label="get">get</el-radio>
-        <el-radio v-model="cmd_form.cmdMethod" label="post">post</el-radio>-->
                   <el-form-item>
                     <el-button type="info" @click="resetForm">重置</el-button>
                   </el-form-item>
@@ -160,13 +156,17 @@
         </el-col>
         <!-- 右边区域，显示设备实时状态 -->
         <el-col :span="12">
+          <!-- AGV running与否 -->
           <el-card class="box-card">
             <div class="grid-content bg-purple">
               <strong>车体状态:</strong>
               {{ agv_running_status }}
             </div>
           </el-card>
+
+          <!-- 状态区域 -->
           <el-row>
+            <!-- AGV 状态 -->
             <el-col :span="12">
               <div class="grid-content bg-purple-light">
                 <el-card class="box-card">
@@ -194,6 +194,7 @@
                 </el-card>
               </div>
             </el-col>
+            <!-- Slam 状态 -->
             <el-col :span="12">
               <div class="grid-content bg-purple">
                 <el-card class="box-card">
@@ -224,9 +225,11 @@
           </el-row>
         </el-col>
       </el-row>
+
+      <!-- Controller -->
       <el-row :gutter="10">
         <el-col>
-          <!-- Controller -->
+          <!-- Card Start -->
           <el-card class="box-card">
             <el-collapse-item title=" Remote Controller" name="2">
               <!-- 货叉控制区域 -->
@@ -239,7 +242,7 @@
                     </el-col>
                     <el-col :span="5">货叉：</el-col>
                     <el-col :span="8">
-                      <el-input size="mini" disabled>
+                      <el-input v-model="forkLift.pos" size="mini" disabled>
                         <template slot="prepend">
                           位置
                         </template>
@@ -250,7 +253,11 @@
                 <el-col :span="12">
                   <el-row :gutter="20">
                     <el-col :span="12">
-                      <el-input placeholder="please input speed" size="mini">
+                      <el-input
+                        v-model="forkLift.params.speed"
+                        placeholder="please input speed"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           <el-button>
                             速度%
@@ -259,7 +266,11 @@
                       </el-input>
                     </el-col>
                     <el-col :span="12">
-                      <el-input placeholder="GET/POST" size="mini">
+                      <el-input
+                        v-model="forkLift.params.method"
+                        placeholder="GET/POST"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           <el-button>
                             方法
@@ -280,28 +291,44 @@
                     </el-col>
                     <el-col :span="5">到绝对值：</el-col>
                     <el-col :span="7">
-                      <el-input placeholder="向量1" size="mini">
+                      <el-input
+                        v-model="AGVMoveForwardAbsolute.params.vector1"
+                        placeholder="向量1"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           向量
                         </template>
                       </el-input>
                     </el-col>
                     <el-col :span="6">
-                      <el-input placeholder="向量2" size="mini"></el-input>
+                      <el-input
+                        v-model="AGVMoveForwardAbsolute.params.vector2"
+                        placeholder="向量2"
+                        size="mini"
+                      ></el-input>
                     </el-col>
                   </el-row>
                 </el-col>
                 <el-col :span="12">
                   <el-row :gutter="20">
                     <el-col :span="12">
-                      <el-input placeholder="please input speed" size="mini">
+                      <el-input
+                        v-model="AGVMoveForwardAbsolute.params.speed"
+                        placeholder="please input speed"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           速度%
                         </template>
                       </el-input>
                     </el-col>
                     <el-col :span="12">
-                      <el-input placeholder="GET/POST" size="mini">
+                      <el-input
+                        v-model="AGVMoveForwardAbsolute.params.method"
+                        placeholder="GET/POST"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           方法
                         </template>
@@ -319,7 +346,10 @@
                     </el-col>
                     <el-col :span="5">去相对位置：</el-col>
                     <el-col :span="8">
-                      <el-input size="mini">
+                      <el-input
+                        v-model="AGVMoveForwardRelative.params.relativeLength"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           距离mm
                         </template>
@@ -330,7 +360,11 @@
                 <el-col :span="12">
                   <el-row :gutter="20">
                     <el-col :span="12">
-                      <el-input placeholder="please input speed" size="mini">
+                      <el-input
+                        v-model="AGVMoveForwardRelative.params.speed"
+                        placeholder="please input speed"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           <el-button>
                             速度%
@@ -339,7 +373,11 @@
                       </el-input>
                     </el-col>
                     <el-col :span="12">
-                      <el-input placeholder="GET/POST" size="mini">
+                      <el-input
+                        v-model="AGVMoveForwardRelative.params.method"
+                        placeholder="GET/POST"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           <el-button>
                             方法
@@ -354,37 +392,52 @@
               <!-- AGV后退到绝对值区域 -->
               <el-row :gutter="20">
                 <el-col :span="12">
-                  <el-row :gutter="20">
+                  <el-row :gutter="5">
                     <el-col :span="3">
                       <el-button plain size="mini">执行</el-button>
                     </el-col>
                     <el-col :span="5">到绝对值：</el-col>
-                    <el-col :span="8">
-                      <el-input size="mini" disabled>
+                    <el-col :span="7">
+                      <el-input
+                        v-model="AGVMoveBackwardAbsolute.params.vector1"
+                        placeholder="向量1"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           向量
                         </template>
                       </el-input>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-input
+                        v-model="AGVMoveBackwardAbsolute.params.vector2"
+                        placeholder="向量2"
+                        size="mini"
+                      ></el-input>
                     </el-col>
                   </el-row>
                 </el-col>
                 <el-col :span="12">
                   <el-row :gutter="20">
                     <el-col :span="12">
-                      <el-input placeholder="please input speed" size="mini">
+                      <el-input
+                        v-model="AGVMoveBackwardAbsolute.params.speed"
+                        placeholder="please input speed"
+                        size="mini"
+                      >
                         <template slot="prepend">
-                          <el-button>
-                            速度%
-                          </el-button>
+                          速度%
                         </template>
                       </el-input>
                     </el-col>
                     <el-col :span="12">
-                      <el-input placeholder="GET/POST" size="mini">
+                      <el-input
+                        v-model="AGVMoveBackwardAbsolute.params.method"
+                        placeholder="GET/POST"
+                        size="mini"
+                      >
                         <template slot="prepend">
-                          <el-button>
-                            方法
-                          </el-button>
+                          方法
                         </template>
                       </el-input>
                     </el-col>
@@ -400,7 +453,10 @@
                     </el-col>
                     <el-col :span="5">去相对位置：</el-col>
                     <el-col :span="8">
-                      <el-input size="mini" disabled>
+                      <el-input
+                        v-model="AGVMoveBackwardRelative.params.relativeLength"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           距离mm
                         </template>
@@ -411,7 +467,11 @@
                 <el-col :span="12">
                   <el-row :gutter="20">
                     <el-col :span="12">
-                      <el-input placeholder="please input speed" size="mini">
+                      <el-input
+                        v-model="AGVMoveBackwardRelative.params.speed"
+                        placeholder="please input speed"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           <el-button>
                             速度%
@@ -420,7 +480,11 @@
                       </el-input>
                     </el-col>
                     <el-col :span="12">
-                      <el-input placeholder="GET/POST" size="mini">
+                      <el-input
+                        v-model="AGVMoveBackwardRelative.params.method"
+                        placeholder="方法编号"
+                        size="mini"
+                      >
                         <template slot="prepend">
                           <el-button>
                             方法
@@ -438,10 +502,15 @@
                   <el-row :gutter="20">
                     <el-col :span="3">
                       <el-row :gutter="20">
-                        <el-button plain size="mini">执行</el-button>
+                        <el-col :span="3">
+                          <el-button plain size="mini">执行</el-button>
+                        </el-col>
                       </el-row>
+
                       <el-row :gutter="20">
-                        <el-button plain size="mini">执行</el-button>
+                        <el-col :span="3">
+                          <el-button plain size="mini">执行</el-button>
+                        </el-col>
                       </el-row>
                     </el-col>
                     <el-col :span="5">
@@ -453,7 +522,7 @@
                       </el-row>
                     </el-col>
                     <el-col :span="8">
-                      <el-input size="mini" disabled>
+                      <el-input size="mini">
                         <template slot="prepend">
                           位置
                         </template>
@@ -625,73 +694,51 @@ export default {
       timer_agv_genaral: [],
       timerId_slam: [],
       backendURL: 'http://localhost:81',
-      activeNames: ['2']
+      activeNames: ['2'],
+      forkLift: {
+        pos: 0,
+        params: {
+          speed: 0,
+          method: 'GET',
+          step: 0.2
+        }
+      },
+      AGVMoveForwardAbsolute: {
+        params: {
+          vector1: 0,
+          vector2: 'GET',
+          speed: 0,
+          method: 'GET'
+        }
+      },
+      AGVMoveForwardRelative: {
+        params: {
+          relativeLength: 0,
+          speed: 0,
+          method: 'GET'
+        }
+      },
+      AGVMoveBackwardAbsolute: {
+        params: {
+          vector1: 0,
+          vector2: 'GET',
+          speed: 0,
+          method: 'GET'
+        }
+      },
+      AGVMoveBackwardRelative: {
+        params: {
+          relativeLength: 0,
+          speed: 0,
+          method: 'GET'
+        }
+      }
     }
   },
   mounted() {
     // this.get_slam_status(), this.get_agv_status()
   },
   methods: {
-    async sendCMD() {
-      const temp = {
-        cmd: this.cmd_form.virtualStationCMD
-      }
-      if (this.cmd_form.cmdMethod === 'post') {
-        if (this.cmd_form.trigger_sendCMD === 'once') {
-          const { data: res } = await this.$http.post(
-            this.cmd_form.virtualStationUrl,
-            temp
-          )
-          if (res.meta.status != 200) return this.$message.error('login failed')
-          this.$message.success('login success')
-          this.cmd_form.cmdResponse +=
-            'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
-        } else {
-          let _this = this
-          this.timerId = setInterval(async () => {
-            const { data: res } = await _this.$http.post(
-              this.cmd_form.virtualStationUrl,
-              temp
-            )
-            if (res.meta.status !== 200)
-              return _this.$message.error(res.meta.msg)
-            _this.$message.success(res.meta.msg)
-            _this.cmd_form.cmdResponse +=
-              'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
-          }, _this.cmd_form.CMDIntervalTime * 1000)
-        }
-      } else {
-        if (this.cmd_form.trigger_sendCMD === 'repeat') {
-          // if repeat, do
-          let _this = this
-          this.timerId = setInterval(async () => {
-            // setInterval(async ()=>{
-            const { data: res } = await _this.$http.get(
-              this.cmd_form.virtualStationUrl,
-              this.cmd_form.virtualStationCMD
-            )
-            if (res.meta.status !== 200)
-              return _this.$message.error(res.meta.msg)
-            _this.$message.success(res.meta.msg)
-            _this.cmd_form.cmdResponse +=
-              'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
-          }, _this.cmd_form.CMDIntervalTime * 1000)
-        } else {
-          // if not, do
-          const { data: res } = await this.$http.get(
-            this.cmd_form.virtualStationUrl,
-            {
-              params: temp
-            }
-          )
-          if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-          this.$message.success(res.meta.msg)
-          this.cmd_form.cmdResponse +=
-            'ResponseData:\n' + JSON.stringify(res.data) + '\n\n\n'
-        }
-      }
-    },
-
     // cmd1
     async sendCMD1() {
       const temp = {

@@ -21,7 +21,11 @@ import {
   TableColumn,
   Collapse,
   CollapseItem,
-  Divider
+  Divider,
+  Select,
+  Option,
+  Tabs,
+  TabPane
 } from 'element-ui'
 
 Vue.use(Button)
@@ -45,5 +49,9 @@ Vue.use(Button)
   .use(Collapse)
   .use(CollapseItem)
   .use(Divider)
+  .use(Select)
+  .use(Option)
+  .use(Tabs)
+  .use(TabPane)
 
 Vue.prototype.$message = Message

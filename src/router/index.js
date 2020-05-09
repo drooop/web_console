@@ -6,6 +6,7 @@ import Welcome from '@/components/Welcome.vue'
 import ConsoleMain from '@/components/webConsole/ConsoleMain.vue'
 import ConsoleConfig from '@/components/webConsole/ConsoleConfig.vue'
 import Console from '@/components/webConsole/Console.vue'
+import newConsole from '@/components/webConsole/newConsole.vue'
 
 Vue.use(VueRouter)
 
@@ -20,7 +21,8 @@ const routes = [
       { path: '/welcome', component: Welcome },
       { path: '/consoleMain', component: ConsoleMain },
       { path: '/consoleConfig', component: ConsoleConfig },
-      { path: '/console', component: Console }
+      { path: '/console', component: Console },
+      { path: '/newConsole', component: newConsole }
     ]
   }
 ]
