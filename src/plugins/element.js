@@ -25,7 +25,9 @@ import {
   Select,
   Option,
   Tabs,
-  TabPane
+  TabPane,
+  Autocomplete,
+  Image
 } from 'element-ui'
 
 Vue.use(Button)
@@ -53,5 +55,7 @@ Vue.use(Button)
   .use(Option)
   .use(Tabs)
   .use(TabPane)
+  .use(Autocomplete)
+  .use(Image)
 
 Vue.prototype.$message = Message

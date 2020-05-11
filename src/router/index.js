@@ -18,11 +18,12 @@ const routes = [
     component: Home,
     redirect: '/welcome',
     children: [
+      { path: '/newConsole', component: newConsole },
       { path: '/welcome', component: Welcome },
       { path: '/consoleMain', component: ConsoleMain },
       { path: '/consoleConfig', component: ConsoleConfig },
-      { path: '/console', component: Console },
-      { path: '/newConsole', component: newConsole }
+      { path: '/console', component: Console }
+      
     ]
   }
 ]
